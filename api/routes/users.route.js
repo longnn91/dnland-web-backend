@@ -4,9 +4,23 @@ const User = require('../models/users.model');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
+const util = require('util');
+const { body } = require('express-validator/check');
+
+const validate = (method) => {
+  switch (method) {
+    case 'register-user':
+      return [
+        body('name', 'Name can not blank').exists(),
+        body('email', 'Email is not valid').isEmail()
+      ]
+      break;
+    default:
+  }
+}
 
 //Register
-router.post('/register', (req, res, next) => {
+router.post('/register', validate('register-user'), (req, res, next) => {
   console.log('enter....');
   let newUser = new User({
     name: req.body.name,
@@ -15,13 +29,29 @@ router.post('/register', (req, res, next) => {
     password: req.body.password
   });
 
-  User.addUser(newUser, (err, user) => {
-    if(err) {
-      res.json({success: false, msg: 'Failed to register user'});
+  // req.checkBody('email', 'Email is not a valid format').isEmail();
+  req.getValidationResult()
+  .then((validationResult) => {
+    if (!validationResult.isEmpty()) {
+      res.status(422).json({
+        result: 'Failed',
+        message: validationResult.array().map(i => {
+          let result = {};
+          result[i.param] = i.msg;
+          return result;
+        })
+      });
     } else {
-      res.json({success: true, msg: 'User has been regstered successfully'});
+      User.addUser(newUser, (err, user) => {
+        if(err) {
+          res.json({success: false, msg: 'Failed to register user'});
+        } else {
+          res.json({success: true, msg: 'User has been regstered successfully'});
+        }
+      });
     }
-  });
+  })
+  .catch(next);
 });
 
 //Authenicate
@@ -60,8 +90,17 @@ router.post('/authenicate', (req, res, next) => {
 });
 
 //Profile
-router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-  res.json({user: req.user});
+router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res) => {
+  const { name, email, username} = req.user;
+  const user = { name, email, username};
+  res.json({user});
+});
+
+router.get('/list', passport.authenticate('jwt', {session: false}), (req, res) => {
+  User.getUserList((err, userList) => {
+    if (err) throw err;
+    res.json({userList})
+  });
 });
 
 module.exports = router;

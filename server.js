@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
@@ -25,6 +26,12 @@ APP.use(cors());
 
 //Static folder config
 APP.use(express.static('public'));
+
+//Using validator middleware
+var validatorOptions = {
+};
+
+APP.use(expressValidator(validatorOptions));
 
 //Body parser middleware for parser request
 APP.use(bodyParser.json());
