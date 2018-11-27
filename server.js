@@ -17,6 +17,7 @@ mongoose.connection.on('connected', () => console.log('Connect to Mongo Database
 mongoose.connection.on('error', error => console.log('Database error:' + error));
 
 //Config
+const auth = require('./api/routes/auth.route');
 const users = require('./api/routes/users.route');
 const APP = express();
 const PORT = 3000;
@@ -36,7 +37,8 @@ APP.use(expressValidator(validatorOptions));
 //Body parser middleware for parser request
 APP.use(bodyParser.json());
 APP.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-APP.use('/users', users)
+APP.use('/auth', auth);
+APP.use('/users', users);
 
 //Passport middleware
 APP.use(passport.initialize());
