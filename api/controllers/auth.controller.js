@@ -6,13 +6,14 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
 module.exports.authenicate = (req, res, next) => {
+  console.log(req);
   const username = req.body.username;
   const password = req.body.password;
 
   User.getUserByUsername(username, (err, user) => {
     if(err) throw err;
     if(!user) {
-      return res.json({success: false, msg: 'User not found'});
+      return res.status(403).json({success: false, msg: 'User not found'});
     }
 
     User.comparePassword(password, user.password, (err, isMatch) => {
@@ -33,7 +34,7 @@ module.exports.authenicate = (req, res, next) => {
           }
         });
       } else {
-        return res.json({success: false, msg: 'password wrong'});
+        return res.status(403).json({success: false, msg: 'password wrong'});
       }
     });
   });
