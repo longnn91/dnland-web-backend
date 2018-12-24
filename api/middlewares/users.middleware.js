@@ -25,7 +25,7 @@ var handleError = (req, res, next) => {
         result: 'Failed',
         message: validationResult.array().map(i => {
           let result = {};
-          result[i.param] = i.msg;
+          result[i.param] = i.message;
           return result;
         })
       });

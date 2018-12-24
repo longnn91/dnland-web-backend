@@ -5,6 +5,7 @@ const User = require('../models/users.model');
 //Register
 module.exports.register = (req, res, next) => {
   let newUser = new User({
+    type: req.body.type,
     name: req.body.name,
     email: req.body.email,
     username: req.body.username,
@@ -13,9 +14,9 @@ module.exports.register = (req, res, next) => {
 
   User.addUser(newUser, (err, user) => {
     if(err) {
-      res.json({success: false, msg: 'Failed to register user'});
+      res.json({success: false, message: 'Failed to register user'});
     } else {
-      res.json({success: true, msg: 'User has been regstered successfully'});
+      res.json({success: true, message: 'User has been regstered successfully'});
     }
   });
 }

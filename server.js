@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const config = require('./api/config/database');
 
 //Connect to Mongo Database
-mongoose.connect(config.database);
+mongoose.connect(config.database, { useNewUrlParser: true });
 
 //On Connection
 mongoose.connection.on('connected', () => console.log('Connect to Mongo Database'));
@@ -25,8 +25,8 @@ const PORT = 3000;
 //Cors middleware
 APP.use(cors());
 
-//Static folder config
-APP.use(express.static('public'));
+// Static folder config
+APP.use(express.static('dist'));
 
 //Using validator middleware
 var validatorOptions = {
@@ -46,8 +46,8 @@ APP.use(passport.session());
 require('./api/config/passport')(passport);
 
 //Index route
-APP.get('/', (req, res) => {
-  res.send('Invalid endpoint');
+APP.get('*', (req, res) => {
+  res.sendFile(__dirname + '/dist/index.html');
 });
 
 //Start server listenning request
