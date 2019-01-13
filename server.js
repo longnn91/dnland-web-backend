@@ -11,7 +11,7 @@ const config = require('./api/config/database');
 mongoose.connect(config.database, { useNewUrlParser: true });
 
 //On Connection
-mongoose.connection.on('connected', () => console.log('Connect to Mongo Database'));
+mongoose.connection.on('connected', () => console.log('Connect to Mongo Databases'));
 
 //On Error
 mongoose.connection.on('error', error => console.log('Database error:' + error));
