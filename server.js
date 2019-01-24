@@ -19,6 +19,7 @@ mongoose.connection.on('error', error => console.log('Database error:' + error))
 //Config
 const auth = require('./api/routes/auth.route');
 const users = require('./api/routes/users.route');
+const post = require('./api/routes/post.route');
 const APP = express();
 const PORT = 3000;
 
@@ -39,6 +40,7 @@ APP.use(bodyParser.json());
 APP.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 APP.use('/auth', auth);
 APP.use('/users', users);
+APP.use('/post', post);
 
 //Passport middleware
 APP.use(passport.initialize());
@@ -46,9 +48,9 @@ APP.use(passport.session());
 require('./api/config/passport')(passport);
 
 //Index route
-APP.get('*', (req, res) => {
-  res.sendFile(__dirname + '/dist/index.html');
-});
+// APP.get('*', (req, res) => {
+//   res.sendFile(__dirname + '/dist/index.html');
+// });
 
 //Start server listenning request
 APP.listen(PORT, () => console.log(`Server started at port ${PORT}`));
