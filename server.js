@@ -48,9 +48,9 @@ APP.use(passport.session());
 require('./api/config/passport')(passport);
 
 //Index route
-// APP.get('*', (req, res) => {
-//   res.sendFile(__dirname + '/dist/index.html');
-// });
+APP.get('*', (req, res) => {
+  res.sendFile(__dirname + '/dist/index.html');
+});
 
 //Start server listenning request
 APP.listen(PORT, () => console.log(`Server started at port ${PORT}`));

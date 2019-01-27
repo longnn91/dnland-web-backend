@@ -7,13 +7,12 @@ var storage = multer.diskStorage({
     cb(null,__dirname + '/../../dist')
   },
   filename: function (req, file, cb) {
-    console.log(file.fieldname);
-    cb(null, file.fieldname)
+    cb(null, `${file.fieldname}_${Date.now()}`)
   }
 });
 const upload = multer({ storage: storage });
 
 //Create, update, delete post
-router.post('', upload.array('images', 5), postController.create);
+router.post('', upload.array('images', 12), postController.create);
 
 module.exports = router;
