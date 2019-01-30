@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 //User Schema
-const PostSchema = mongoose.Schema({
+const PostSchema = mongoose.Schema ({
   datetime: {
     type: String,
     require: true
@@ -11,12 +11,16 @@ const PostSchema = mongoose.Schema({
     type: String,
     require: true
   },
-  content: {
+  description: {
     type: String,
     require: true
   },
   images: {
     type: [String],
+    require: true
+  },
+  location: {
+    type: String,
     require: true
   }
 });
@@ -24,5 +28,9 @@ const PostSchema = mongoose.Schema({
 const Post = module.exports = mongoose.model('Post', PostSchema);
 
 module.exports.addPost = (newPost, callback) => {
-  newUser.save(callback);
+  newPost.save(callback);
+}
+
+module.exports.getPostList = (callback) => {
+  Post.find(null, null, callback).sort( { _id: -1 } );
 }
